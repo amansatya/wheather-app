@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const WeatherCard = ({ date, temp, avgTemp, description, icon, wind, humidity }) => {
+const WeatherCard = ({ date, temp, avgTemp, description, icon, wind, humidity, isActive }) => {
     const temperature = temp || avgTemp;
 
     return (
-        <div className="group relative">
+        <div className={`group relative transition-all duration-500 ${isActive ? 'scale-110 z-20' : 'scale-90 opacity-60'}`}>
+            <div className={`absolute -inset-0.5 bg-gradient-to-r from-emerald-400/20 via-teal-400/20 to-green-400/20 rounded-3xl blur-md transition-opacity duration-500 ${isActive ? 'opacity-70' : 'opacity-40'}`}></div>
 
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-400/20 via-teal-400/20 to-green-400/20 rounded-3xl blur-md opacity-40 group-hover:opacity-70 transition-opacity duration-500"></div>
-
-            <div className="relative bg-slate-800/40 backdrop-blur-xl p-8 rounded-3xl shadow-2xl text-white w-full sm:w-72 flex flex-col items-center transform transition-all duration-300 hover:scale-[1.02] hover:-translate-y-1 border border-slate-600/30">
-
+            <div className="relative bg-slate-800/40 backdrop-blur-xl p-8 rounded-3xl shadow-2xl text-white w-80 h-96 flex flex-col items-center justify-center border border-slate-600/30">
                 <div className="bg-gradient-to-r from-emerald-300/90 to-teal-300/90 bg-clip-text text-transparent font-bold text-lg mb-2">
                     {date}
                 </div>
@@ -51,4 +49,117 @@ const WeatherCard = ({ date, temp, avgTemp, description, icon, wind, humidity })
     );
 };
 
-export default WeatherCard;
+const WeatherCarousel = ({ weatherData }) => {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isTransitioning, setIsTransitioning] = useState(false);
+
+    const allWeatherData = [
+        { ...weatherData.current, date: "Today" },
+        ...weatherData.forecast
+    ];
+
+    const nextSlide = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setCurrentIndex((prevIndex) => (prevIndex + 1) % allWeatherData.length);
+            setIsTransitioning(false);
+        }, 50);
+    };
+
+    const prevSlide = () => {
+        if (isTransitioning) return;
+        setIsTransitioning(true);
+        setTimeout(() => {
+            setCurrentIndex((prevIndex) => (prevIndex - 1 + allWeatherData.length) % allWeatherData.length);
+            setIsTransitioning(false);
+        }, 50);
+    };
+
+    const getVisibleCards = () => {
+        const visibleCards = [];
+        const totalCards = allWeatherData.length;
+
+        for (let i = -3; i <= 3; i++) {
+            const index = (currentIndex + i + totalCards) % totalCards;
+            visibleCards.push({
+                data: allWeatherData[index],
+                index: index,
+                position: i,
+                isActive: i === 0
+            });
+        }
+
+        return visibleCards;
+    };
+
+    return (
+        <div className="relative w-full max-w-6xl mx-auto">
+
+            <button
+                onClick={prevSlide}
+                disabled={isTransitioning}
+                className={`absolute left-4 top-1/2 transform -translate-y-1/2 z-30 bg-slate-800/60 hover:bg-slate-700/80 backdrop-blur-lg p-4 rounded-full border border-slate-600/30 text-white hover:text-emerald-300 transition-all duration-300 hover:scale-110 shadow-xl ${isTransitioning ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <button
+                onClick={nextSlide}
+                disabled={isTransitioning}
+                className={`absolute right-4 top-1/2 transform -translate-y-1/2 z-30 bg-slate-800/60 hover:bg-slate-700/80 backdrop-blur-lg p-4 rounded-full border border-slate-600/30 text-white hover:text-emerald-300 transition-all duration-300 hover:scale-110 shadow-xl ${isTransitioning ? 'opacity-50 cursor-not-allowed' : ''}`}
+            >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+
+            <div className="flex justify-center items-center h-[500px] overflow-hidden relative">
+                <div className="relative w-full h-full flex items-center justify-center">
+                    {getVisibleCards().map((card) => {
+                        let translateX = card.position * 350; // Increased spacing for smoother transitions
+                        let scale = card.isActive ? 1.1 : card.position === -1 || card.position === 1 ? 0.95 : 0.8;
+                        let opacity = card.isActive ? 1 : card.position === -1 || card.position === 1 ? 0.7 : 0.3;
+                        let zIndex = card.isActive ? 20 : 15 - Math.abs(card.position);
+
+                        return (
+                            <div
+                                key={`${card.index}-${currentIndex}`}
+                                className="absolute transition-all duration-700 ease-out"
+                                style={{
+                                    transform: `translateX(${translateX}px) scale(${scale})`,
+                                    opacity: opacity,
+                                    zIndex: zIndex
+                                }}
+                            >
+                                <WeatherCard
+                                    {...card.data}
+                                    isActive={card.isActive}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            <div className="flex justify-center mt-8 gap-3">
+                {allWeatherData.map((_, index) => (
+                    <button
+                        key={index}
+                        onClick={() => !isTransitioning && setCurrentIndex(index)}
+                        disabled={isTransitioning}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                            index === currentIndex
+                                ? 'bg-gradient-to-r from-emerald-400 to-teal-400 scale-125'
+                                : 'bg-slate-600/50 hover:bg-slate-500/70'
+                        } ${isTransitioning ? 'cursor-not-allowed opacity-50' : ''}`}
+                    />
+                ))}
+            </div>
+        </div>
+    );
+};
+
+export default WeatherCarousel;
