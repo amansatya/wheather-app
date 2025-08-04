@@ -2,6 +2,26 @@ import React, { useState } from 'react';
 import SearchBar from './components/SearchBar';
 import WeatherCarousel from './components/WeatherCard';
 
+const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+};
+
+const generateDateRange = () => {
+    const dates = [];
+    const today = new Date();
+
+    for (let i = 0; i < 6; i++) {
+        const date = new Date(today);
+        date.setDate(today.getDate() + i);
+        dates.push(formatDate(date));
+    }
+
+    return dates;
+};
+
 function App() {
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -17,13 +37,11 @@ function App() {
             if (!res.ok) {
                 throw new Error('City not found or API failed.');
             }
-
             const data = await res.json();
             setWeatherData(data);
         } catch (err) {
             console.error(err);
             setError(err.message || 'Something went wrong');
-        } finally {
             setLoading(false);
         }
     };
@@ -34,12 +52,11 @@ function App() {
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-blue-900/30 via-transparent to-slate-800/50"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-800/40 via-transparent to-blue-800/25"></div>
-            <div className="absolute top-20 left-20 w-80 h-80 bg-gradient-to-r from-blue-500/15 to-slate-500/15 rounded-full filter blur-3xl opacity-60 animate-pulse"></div>
-            <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-slate-600/15 to-blue-600/15 rounded-full filter blur-3xl opacity-50 animate-pulse" style={{ animationDelay: '3s' }}></div>
-            <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full filter blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
+            <div className="absolute top-20 left-20 w-80 h-80 bg-gradient-to-r from-blue-500/15 to-slate-500/15 rounded-full blur-3xl opacity-60 animate-pulse"></div>
+            <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-slate-600/15 to-blue-600/15 rounded-full blur-3xl opacity-50 animate-pulse" style={{ animationDelay: '3s' }}></div>
+            <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
 
             <div className="relative z-10 text-white px-6 py-12">
-
                 <div className="text-center mb-12">
                     <h1 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
                         Weather Forecast
@@ -88,17 +105,20 @@ function App() {
             </div>
 
             <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
+                @keyframes fade-in {
+                  from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                  }
+                  to {
+                    opacity: 1;
+                    transform: translateY(0);
+                  }
+                }
+                .animate-fade-in {
+                  animation: fade-in 0.6s ease-out;
+                }
+            `}</style>
         </div>
     );
 }
