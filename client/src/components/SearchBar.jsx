@@ -34,7 +34,7 @@ const SearchBar = ({ onSearch }) => {
             <button
                 onClick={handleSearch}
                 disabled={location.trim() === ''}
-                className={`relative overflow-hidden px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] ${
+                className={`cursor-pointer relative overflow-hidden px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 transform hover:scale-[1.02] ${
                     location.trim() === ''
                         ? 'bg-slate-600/40 cursor-not-allowed text-slate-400'
                         : 'bg-gradient-to-r from-teal-600/80 to-cyan-600/80 hover:from-teal-500/90 hover:to-cyan-500/90 text-white shadow-xl hover:shadow-teal-500/20 border border-teal-500/20'
