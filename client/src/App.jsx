@@ -50,7 +50,6 @@ function App() {
     return (
         <div className="min-h-screen relative overflow-hidden">
 
-            {/* Background Gradients */}
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-blue-900/30 via-transparent to-slate-800/50"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-800/40 via-transparent to-blue-800/25"></div>
@@ -58,9 +57,8 @@ function App() {
             <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-slate-600/15 to-blue-600/15 rounded-full blur-3xl opacity-50 animate-pulse" style={{ animationDelay: '3s' }}></div>
             <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
 
-            {/* Main Content */}
             <div className="relative z-10 text-white px-6 py-12">
-                {/* Header */}
+
                 <div className="text-center mb-12">
                     <h1 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
                         Weather Forecast
@@ -75,17 +73,14 @@ function App() {
                     </p>
                 </div>
 
-                {/* Search */}
                 <SearchBar onSearch={handleSearch} />
 
-                {/* Loader */}
                 {loading && (
                     <div className="mt-12 flex justify-center">
                         <div className="w-12 h-12 border-4 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
 
-                {/* Error */}
                 {error && (
                     <div className="mt-8 flex justify-center">
                         <div className="bg-red-600/20 backdrop-blur-lg border border-red-500/30 text-red-200 px-8 py-4 rounded-2xl shadow-xl text-center">
@@ -100,7 +95,6 @@ function App() {
                     </div>
                 )}
 
-                {/* Weather Results */}
                 {weatherData && (
                     <div className="mt-16 animate-fade-in">
                         <div className="text-center mb-12">
@@ -118,7 +112,6 @@ function App() {
                 )}
             </div>
 
-            {/* Animation */}
             <style jsx>{`
                 @keyframes fade-in {
                     from {
