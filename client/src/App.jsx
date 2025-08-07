@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import WeatherCarousel from './components/WeatherCard';
 
@@ -47,9 +47,48 @@ function App() {
         }
     };
 
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+        } else {
+            console.log("Geolocation not supported");
+            handleSearch("Delhi");
+        }
+    }, []);
+
+    const successCallback = async (position) => {
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+
+        try {
+            const res = await fetch(`http://localhost:5000/api/geo-reverse?lat=${lat}&lon=${lon}`);
+            const data = await res.json();
+
+            if (!Array.isArray(data) || data.length === 0) {
+                console.warn("⚠️ No city found, falling back to Delhi");
+                return handleSearch("Delhi");
+            }
+
+            const cityName = data[0]?.name;
+
+            if (cityName) {
+                handleSearch(cityName);
+            } else {
+                handleSearch("Delhi");
+            }
+        } catch (error) {
+            console.error("❌ Reverse geocoding failed:", error);
+            handleSearch("Delhi");
+        }
+    };
+
+    const errorCallback = (error) => {
+        console.warn("Geolocation error:", error.message);
+        handleSearch("Delhi");
+    };
+
     return (
         <div className="min-h-screen relative overflow-hidden">
-
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-blue-900/30 via-transparent to-slate-800/50"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-800/40 via-transparent to-blue-800/25"></div>
@@ -58,7 +97,6 @@ function App() {
             <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
 
             <div className="relative z-10 text-white px-6 py-12">
-
                 <div className="text-center mb-12">
                     <h1 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
                         Weather Forecast
