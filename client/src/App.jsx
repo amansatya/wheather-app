@@ -89,6 +89,7 @@ function App() {
 
     return (
         <div className="min-h-screen relative overflow-hidden">
+            {/* Background layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-blue-900/30 via-transparent to-slate-800/50"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-800/40 via-transparent to-blue-800/25"></div>
@@ -96,36 +97,40 @@ function App() {
             <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-r from-slate-600/15 to-blue-600/15 rounded-full blur-3xl opacity-50 animate-pulse" style={{ animationDelay: '3s' }}></div>
             <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
 
-            <div className="relative z-10 text-white px-6 py-12">
-                <div className="text-center mb-12">
-                    <h1 className="text-6xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
+            <div className="relative z-10 text-white px-4 sm:px-6 py-10 sm:py-12">
+                {/* Title Section */}
+                <div className="text-center mb-8 sm:mb-12">
+                    <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-3 sm:mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
                         Weather Forecast
                     </h1>
-                    <div className="flex justify-center items-center gap-4">
-                        <div className="h-0.5 w-16 bg-gradient-to-r from-transparent to-blue-400/60 rounded-full"></div>
-                        <span className="text-4xl">🌦️</span>
-                        <div className="h-0.5 w-16 bg-gradient-to-l from-transparent to-slate-400/60 rounded-full"></div>
+                    <div className="flex justify-center items-center gap-3 sm:gap-4">
+                        <div className="h-0.5 w-12 sm:w-16 bg-gradient-to-r from-transparent to-blue-400/60 rounded-full"></div>
+                        <span className="text-2xl sm:text-4xl">🌦️</span>
+                        <div className="h-0.5 w-12 sm:w-16 bg-gradient-to-l from-transparent to-slate-400/60 rounded-full"></div>
                     </div>
-                    <p className="text-xl text-slate-300/80 mt-6 font-light">
+                    <p className="text-base sm:text-xl text-slate-300/80 mt-4 sm:mt-6 font-light">
                         Discover weather conditions around the world
                     </p>
                 </div>
 
+                {/* Search Bar */}
                 <SearchBar onSearch={handleSearch} />
 
+                {/* Loading Spinner */}
                 {loading && (
-                    <div className="mt-12 flex justify-center">
-                        <div className="w-12 h-12 border-4 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="mt-10 sm:mt-12 flex justify-center">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
 
+                {/* Error Message */}
                 {error && (
-                    <div className="mt-8 flex justify-center">
-                        <div className="bg-red-600/20 backdrop-blur-lg border border-red-500/30 text-red-200 px-8 py-4 rounded-2xl shadow-xl text-center">
-                            <p className="font-medium">{error}</p>
+                    <div className="mt-6 sm:mt-8 flex justify-center">
+                        <div className="bg-red-600/20 backdrop-blur-lg border border-red-500/30 text-red-200 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-xl text-center">
+                            <p className="font-medium text-sm sm:text-base">{error}</p>
                             <button
                                 onClick={() => handleSearch("London")}
-                                className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition"
+                                className="mt-3 sm:mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition text-sm sm:text-base"
                             >
                                 Try "London"
                             </button>
@@ -133,15 +138,16 @@ function App() {
                     </div>
                 )}
 
+                {/* Weather Data */}
                 {weatherData && (
-                    <div className="mt-16 animate-fade-in">
-                        <div className="text-center mb-12">
-                            <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-200/90 to-slate-200/90 bg-clip-text text-transparent mb-2">
+                    <div className="mt-12 sm:mt-16 animate-fade-in">
+                        <div className="text-center mb-8 sm:mb-12">
+                            <h2 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-blue-200/90 to-slate-200/90 bg-clip-text text-transparent mb-1 sm:mb-2">
                                 {weatherData.location}
                             </h2>
-                            <p className="text-xl text-slate-300/80 font-light">{weatherData.country}</p>
-                            <div className="mt-4 flex justify-center">
-                                <div className="h-0.5 w-32 bg-gradient-to-r from-blue-400/50 to-slate-400/50 rounded-full"></div>
+                            <p className="text-lg sm:text-xl text-slate-300/80 font-light">{weatherData.country}</p>
+                            <div className="mt-3 sm:mt-4 flex justify-center">
+                                <div className="h-0.5 w-20 sm:w-32 bg-gradient-to-r from-blue-400/50 to-slate-400/50 rounded-full"></div>
                             </div>
                         </div>
 
