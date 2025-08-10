@@ -79,7 +79,6 @@ const WeatherCarousel = ({ weatherData }) => {
         }
     };
 
-    // Detect screen resize
     useEffect(() => {
         const handleResize = () => {
             setIsMobile(window.innerWidth < 768);
@@ -88,7 +87,6 @@ const WeatherCarousel = ({ weatherData }) => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Center active card
     useEffect(() => {
         const container = containerRef.current;
         if (container) {

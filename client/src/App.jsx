@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import WeatherCarousel from './components/WeatherCard';
 
+const API_URL = import.meta.env.VITE_API_URL;
+const API_REVERSE_URL = import.meta.env.VITE_API_REVERSE_URL;
+
 const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -33,9 +36,9 @@ function App() {
         setError('');
 
         try {
-            const res = await fetch(`http://localhost:5000/api/weather?location=${city}`);
+            const res = await fetch(`${API_URL}?location=${city}`);
             if (!res.ok) {
-                throw new Error('City not found or API failed.');
+                throw new Error('City not found.');
             }
             const data = await res.json();
             setWeatherData(data);
@@ -61,7 +64,7 @@ function App() {
         const lon = position.coords.longitude;
 
         try {
-            const res = await fetch(`http://localhost:5000/api/geo-reverse?lat=${lat}&lon=${lon}`);
+            const res = await fetch(`${API_REVERSE_URL}?lat=${lat}&lon=${lon}`);
             const data = await res.json();
 
             if (!Array.isArray(data) || data.length === 0) {
@@ -89,7 +92,6 @@ function App() {
 
     return (
         <div className="min-h-screen relative overflow-hidden">
-            {/* Background layers */}
             <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"></div>
             <div className="absolute inset-0 bg-gradient-to-tl from-blue-900/30 via-transparent to-slate-800/50"></div>
             <div className="absolute inset-0 bg-gradient-to-tr from-slate-800/40 via-transparent to-blue-800/25"></div>
@@ -98,7 +100,6 @@ function App() {
             <div className="absolute top-1/2 left-1/3 w-72 h-72 bg-gradient-to-r from-slate-500/10 to-blue-500/10 rounded-full blur-3xl opacity-40 animate-pulse" style={{ animationDelay: '6s' }}></div>
 
             <div className="relative z-10 text-white px-4 sm:px-6 py-10 sm:py-12">
-                {/* Title Section */}
                 <div className="text-center mb-8 sm:mb-12">
                     <h1 className="text-4xl sm:text-6xl md:text-7xl font-black mb-3 sm:mb-4 bg-gradient-to-r from-slate-100 via-blue-100/90 to-slate-200/90 bg-clip-text text-transparent">
                         Weather Forecast
@@ -113,17 +114,14 @@ function App() {
                     </p>
                 </div>
 
-                {/* Search Bar */}
                 <SearchBar onSearch={handleSearch} />
 
-                {/* Loading Spinner */}
                 {loading && (
                     <div className="mt-10 sm:mt-12 flex justify-center">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 border-4 border-blue-300 border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 )}
 
-                {/* Error Message */}
                 {error && (
                     <div className="mt-6 sm:mt-8 flex justify-center">
                         <div className="bg-red-600/20 backdrop-blur-lg border border-red-500/30 text-red-200 px-6 sm:px-8 py-3 sm:py-4 rounded-2xl shadow-xl text-center">
@@ -138,7 +136,6 @@ function App() {
                     </div>
                 )}
 
-                {/* Weather Data */}
                 {weatherData && (
                     <div className="mt-12 sm:mt-16 animate-fade-in">
                         <div className="text-center mb-8 sm:mb-12">

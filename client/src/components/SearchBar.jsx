@@ -19,7 +19,6 @@ const SearchBar = ({ onSearch }) => {
 
     return (
         <div className="flex flex-col sm:flex-row justify-center items-center gap-6 mt-12 w-full px-6 sm:px-10 md:px-20">
-            {/* Input Box */}
             <div className="relative w-full sm:w-[28rem]">
                 <input
                     type="text"
