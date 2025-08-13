@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import WeatherCarousel from './components/WeatherCard';
+import { Analytics } from '@vercel/analytics/react';
 
 const API_URL = import.meta.env.VITE_API_URL;
-const API_REVERSE_URL = import.meta.env.VITE_API_REVERSE_URL;
 
 const formatDate = (date) => {
     const day = String(date.getDate()).padStart(2, '0');
@@ -15,13 +15,11 @@ const formatDate = (date) => {
 const generateDateRange = () => {
     const dates = [];
     const today = new Date();
-
     for (let i = 0; i < 6; i++) {
         const date = new Date(today);
         date.setDate(today.getDate() + i);
         dates.push(formatDate(date));
     }
-
     return dates;
 };
 
@@ -64,19 +62,17 @@ function App() {
         const lon = position.coords.longitude;
 
         try {
-            const res = await fetch(`${API_REVERSE_URL}?lat=${lat}&lon=${lon}`);
+            const res = await fetch(
+                `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+            );
             const data = await res.json();
 
-            if (!Array.isArray(data) || data.length === 0) {
-                console.warn("⚠️ No city found, falling back to Delhi");
-                return handleSearch("Delhi");
-            }
-
-            const cityName = data[0]?.name;
+            let cityName = data.locality || data.city || data.principalSubdivision;
 
             if (cityName) {
                 handleSearch(cityName);
             } else {
+                console.warn("⚠️ No city found, falling back to Delhi");
                 handleSearch("Delhi");
             }
         } catch (error) {
@@ -151,6 +147,8 @@ function App() {
                         <WeatherCarousel weatherData={weatherData} />
                     </div>
                 )}
+
+                <Analytics />
             </div>
 
             <style jsx>{`
