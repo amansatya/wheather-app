@@ -67,7 +67,7 @@ function App() {
             );
             const data = await res.json();
 
-            let cityName = data.locality || data.city || data.principalSubdivision;
+            let cityName = data.city || data.principalSubdivision;
 
             if (cityName) {
                 handleSearch(cityName);
