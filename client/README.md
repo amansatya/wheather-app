@@ -15,25 +15,30 @@ Welcome to the **client** folder of the Weather App! This frontend provides a mo
 ## 🗂️ Folder Structure
 
 ```
-client/
 ├── public/
 │   └── vite.svg              # Vite logo
 ├── src/
 │   ├── assets/               # Static assets (images, icons)
-│   │   ├── react.svg         # React logo
-│   ├── components/           # Reusable React components (WeatherCard, SearchBar)
-│   │   ├──SearchBar.jsx      # Search input component
-│   │   ├── WeatherCard.jsx   # Displays weather info for a day
-│   ├── App.jsx               # App entry point
+│   │   └── react.svg         # React logo
+│   ├── components/           # Reusable React components
+│   │   ├── SearchBar.jsx     # Search input component
+│   │   └── WeatherCard.jsx   # Displays weather info for a day
+│   ├── pages/                # Page-level components
+│   │   └── Home.jsx          # Main weather UI page
+│   ├── utils/                # Utility/helper functions
+│   │   ├── formatDate.js     # Format date helper
+│   │   ├── generateDateRange.js # Generate array of dates
+│   │   └── geolocation.js    # Geolocation utility
+│   ├── App.jsx               # App entry point (imports Home + Analytics)
 │   ├── index.css             # Global styles (Tailwind CSS)
-│   ├── main.jsx              # ReactDOM render setup
+│   └── main.jsx              # ReactDOM render setup
 ├── .gitignore
 ├── eslint.config.js          # Linting rules
 ├── index.html
 ├── package.json
 ├── package-lock.json
-├── tailwind.config.js    # Tailwind CSS config
-└── vite.config.js        # Vite build config
+├── tailwind.config.js        # Tailwind CSS config
+└── vite.config.js            # Vite build config
 ```
 
 ---
